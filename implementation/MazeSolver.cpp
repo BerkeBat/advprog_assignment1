@@ -69,11 +69,6 @@ void MazeSolver::solve(Maze maze) {
       std::cout << "b: " << b[0] << "," << b[1] << std::endl; 
    }while(!(b[0] == E[0] && b[1] == E[1]));
 }
-
-// bool canMove(int b, int direction){
-   
-// }
-
 Trail* MazeSolver::getSolution() {
    return solution;
 }
@@ -110,23 +105,6 @@ bool MazeSolver::canMove(coordinate b, int direction, Maze maze, Trail* solution
    }
    return true; 
 }
-
-// coordinate* getL(int* b, int direction, coordinate l){
-   // if(direction == NORTH){
-   //    l[0] = b[0];
-   //    l[1] = b[1] - 1;
-   // } else if(direction == EAST){
-   //    l[0] = b[0] + 1;
-   //    l[1] = b[1];
-   // } else if(direction == SOUTH){
-   //    l[0] = b[0];
-   //    l[1] = b[1] + 1;
-   // } else if(direction == WEST){
-   //    l[0] = b[0] - 1;
-   //    l[1] = b[1];
-   // } 
-//    return l;
-// }
 
 
 
