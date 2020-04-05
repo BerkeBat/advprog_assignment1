@@ -7,7 +7,7 @@ MazeSolver::MazeSolver() {
 }
 
 MazeSolver::~MazeSolver() {
-   // TODO delete solution;
+  delete solution;
 }
 
 void MazeSolver::solve(Maze maze) {
@@ -31,42 +31,41 @@ void MazeSolver::solve(Maze maze) {
          }
       }
    }
-   // std::cout << "Starting at: " << b[0] << ", " << b[1] << std::endl;
    do{
       if(!solution->contains(b[0], b[1])){
          solution->addCopy(new Breadcrumb(b[0], b[1], false));
       }
-      // std::cout << "Can move N?: " << canMove(b, NORTH, maze, solution) << std::endl;
-      // std::cout << "Can move E?: " << canMove(b, EAST, maze, solution) << std::endl;
-      // std::cout << "Can move S?: " << canMove(b, SOUTH, maze, solution) << std::endl;
-      // std::cout << "Can move W?: " << canMove(b, WEST, maze, solution) << std::endl;
-      
-      
-      //CHECKING DIRECTION FOR POTENTIAL MOVE
-      bool foundMove = false;
-      int direction = 0;
       coordinate l = {};
-      while(foundMove == false){
-         if(canMove(b, direction, maze, solution)){
-            if(direction == NORTH){
-               l[0] = b[0];
-               l[1] = b[1] - 1;
-            } else if(direction == EAST){
-               l[0] = b[0] + 1;
-               l[1] = b[1];
-            } else if(direction == SOUTH){
-               l[0] = b[0];
-               l[1] = b[1] + 1;
-            } else if(direction == WEST){
-               l[0] = b[0] - 1;
-               l[1] = b[1];
-            } 
-            foundMove = true;
+      if(canMove(b, NORTH, maze, solution)){
+         l[0] = b[0];
+         l[1] = b[1] - 1;
+         moveB(b, l);
+      } else if(canMove(b, EAST, maze, solution)){
+         l[0] = b[0] + 1;
+         l[1] = b[1];
+         moveB(b, l);
+      } else if(canMove(b, SOUTH, maze, solution)){
+         l[0] = b[0];
+         l[1] = b[1] + 1;
+         moveB(b, l);
+      } else if(canMove(b, WEST, maze, solution)){
+         l[0] = b[0] - 1;
+         l[1] = b[1];
+         moveB(b, l);
+      } 
+      else {
+         for(int i = 0; i < solution->size(); ++i){
+            if(solution->getPtr(i) != nullptr){
+               if(solution->getPtr(i)->getX() == b[0] &&
+                  solution->getPtr(i)->getY() == b[1]){
+                     solution->getPtr(i)->setStale(true);
+                     b[0] = solution->getPtr(i-1)->getX();
+                     b[1] = solution->getPtr(i-1)->getY();
+                  }
+            }
          }
-         direction += 1;
+         
       }
-      moveB(b, l);
-      std::cout << "b: " << b[0] << "," << b[1] << std::endl; 
    }while(!(b[0] == E[0] && b[1] == E[1]));
 }
 Trail* MazeSolver::getSolution() {

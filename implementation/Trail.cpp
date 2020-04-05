@@ -36,3 +36,14 @@ bool Trail::contains(int x, int y) {
    }
    return false;
 }
+
+Breadcrumb* Trail::getIndex(int x, int y) {
+   for(int i = 0; i < length; ++i){
+      if(breadcrumbs[i] != nullptr){
+         if(breadcrumbs[i]->getX() == x && breadcrumbs[i]->getY() == y){
+            return breadcrumbs[i];
+         }
+      }
+   }
+   return nullptr;
+}

@@ -47,24 +47,26 @@ int main(int argc, char** argv) {
 void readMazeStdin(Maze maze) {
     // ASSUME THE MAZE IS A FIXED SIZE (20X20).
 
-    for(int i = 0; i < MAZE_DIM; ++i){
-        for(int j = 0; j < MAZE_DIM; ++j){
-            std::cin >> maze[i][j];
+    for(int y = 0; y < MAZE_DIM; ++y){
+        for(int x = 0; x < MAZE_DIM; ++x){
+            std::cin >> maze[y][x];
         }
     }
 }
 
 
 void printMazeStdout(Maze maze, Trail* solution) {
-    for(int i = 0; i < MAZE_DIM; ++i){
-        for(int j = 0; j < MAZE_DIM; ++j){
-            if(solution->contains(j, i) && solution->getPtr(i)->isStale() == false){
-                std::cout << ROUTE;
-            }else
-            {
-                std::cout << maze[i][j];
-            }
-            
+    for(int y = 0; y < MAZE_DIM; ++y){
+        for(int x = 0; x < MAZE_DIM; ++x){
+                if(solution->contains(x, y) && solution->getIndex(x, y)->isStale() == false){
+                    if(maze[y][x] == 'S'){
+                        std::cout << 'S';
+                    }else{
+                        std::cout << ROUTE;
+                    }
+                }else{
+                    std::cout << maze[y][x];
+                }
         }
         std::cout << std::endl;
     }

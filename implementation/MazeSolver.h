@@ -10,9 +10,8 @@
 #define EAST  1
 #define SOUTH 2
 #define WEST  3
-#define COORDINATE_ARRAY_LENGTH 2
 
-typedef int coordinate[COORDINATE_ARRAY_LENGTH];
+typedef int coordinate[2];
 
 class MazeSolver {
 public:

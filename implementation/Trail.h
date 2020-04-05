@@ -29,6 +29,8 @@ public:
    // Check if the trail contain a breadcrumb at the location
    bool contains(int x, int y);
 
+   Breadcrumb* getIndex(int x, int y);
+
    /*                                           */
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
