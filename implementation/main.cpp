@@ -39,7 +39,7 @@ int main(int argc, char** argv) {
     // Print Maze to stdout
     printMazeStdout(maze, solution);
 
-    // delete solver;
+    delete solver;
 
     return EXIT_SUCCESS;
 }

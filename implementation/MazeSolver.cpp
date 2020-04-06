@@ -7,12 +7,16 @@ MazeSolver::MazeSolver() {
 }
 
 MazeSolver::~MazeSolver() {
-  delete solution;
+  delete &solution;
 }
 
 void MazeSolver::solve(Maze maze) {
    coordinate b = {};
    coordinate E = {};
+   // std::string* directions = new std::string[50];
+   // std::string directions[50] = {};
+   // std::string direction;
+   // int directionsLength = 0;
    //FINDING 'E'
    for(int y = 0; y < MAZE_DIM; ++y){
       for(int x = 0; x < MAZE_DIM; ++x){
@@ -40,18 +44,30 @@ void MazeSolver::solve(Maze maze) {
          l[0] = b[0];
          l[1] = b[1] - 1;
          moveB(b, l);
+         // direction = "north";
+         // directions[directionsLength] = std::string(direction);
+         // directionsLength += 1;
       } else if(canMove(b, EAST, maze, solution)){
          l[0] = b[0] + 1;
          l[1] = b[1];
          moveB(b, l);
+         // direction = "east";
+         // directions[directionsLength] = std::string(direction);
+         // directionsLength += 1;
       } else if(canMove(b, SOUTH, maze, solution)){
          l[0] = b[0];
          l[1] = b[1] + 1;
          moveB(b, l);
+         // direction = "south";
+         // directions[directionsLength] = std::string(direction);
+         // directionsLength += 1;
       } else if(canMove(b, WEST, maze, solution)){
          l[0] = b[0] - 1;
          l[1] = b[1];
          moveB(b, l);
+         // direction = "west";
+         // directions[directionsLength] = std::string(direction);
+         // directionsLength += 1;
       } 
       else {
          for(int i = 0; i < solution->size(); ++i){
@@ -69,7 +85,16 @@ void MazeSolver::solve(Maze maze) {
    }while(!(b[0] == E[0] && b[1] == E[1]));
 }
 Trail* MazeSolver::getSolution() {
-   return solution;
+   int solutionLength = solution->size();
+   Trail* solutionCopy = new Trail();
+   for(int s = 0; s < solutionLength; ++s){
+      if(solution->getPtr(s) != nullptr){
+         solutionCopy->addCopy(new Breadcrumb(solution->getPtr(s)->getX(),
+          solution->getPtr(s)->getY(),
+           solution->getPtr(s)->isStale()));
+      }
+   }
+   return solutionCopy;
 }
 
 void MazeSolver::moveB(coordinate b, coordinate destination){

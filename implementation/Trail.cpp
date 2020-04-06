@@ -21,9 +21,12 @@ Breadcrumb* Trail::getPtr(int i) {
 }
 
 void Trail::addCopy(Breadcrumb* t) {
-   //TODO: Check size less than max possible size
-   breadcrumbs[length] = t;
-   length += 1;
+   // if(t != nullptr){
+   if(length < TRAIL_ARRAY_MAX_SIZE){
+      breadcrumbs[length] = t;
+      length += 1;
+   }
+   // }
 }
 
 bool Trail::contains(int x, int y) {
