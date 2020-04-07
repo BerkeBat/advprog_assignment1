@@ -4,6 +4,7 @@
 
 MazeSolver::MazeSolver() {
    solution = new Trail();
+   directions = new std::string[TRAIL_ARRAY_MAX_SIZE];
 }
 
 MazeSolver::~MazeSolver() {
@@ -13,22 +14,14 @@ MazeSolver::~MazeSolver() {
 void MazeSolver::solve(Maze maze) {
    coordinate b = {};
    coordinate E = {};
-   // std::string* directions = new std::string[50];
-   // std::string directions[50] = {};
-   // std::string direction;
-   // int directionsLength = 0;
-   //FINDING 'E'
+   int directionsLength = 0;
+   //FINDING 'S' AND 'E'
    for(int y = 0; y < MAZE_DIM; ++y){
       for(int x = 0; x < MAZE_DIM; ++x){
          if(maze[y][x] == 'E'){
             E[0] = x;
             E[1] = y;
          }
-      }
-   }
-   //FINDING 'S'
-   for(int y = 0; y < MAZE_DIM; ++y){
-      for(int x = 0; x < MAZE_DIM; ++x){
          if(maze[y][x] == 'S'){
             b[0] = x;
             b[1] = y;
@@ -44,30 +37,26 @@ void MazeSolver::solve(Maze maze) {
          l[0] = b[0];
          l[1] = b[1] - 1;
          moveB(b, l);
-         // direction = "north";
-         // directions[directionsLength] = std::string(direction);
-         // directionsLength += 1;
+         directions[directionsLength] = std::string("north");
+         directionsLength += 1;
       } else if(canMove(b, EAST, maze, solution)){
          l[0] = b[0] + 1;
          l[1] = b[1];
          moveB(b, l);
-         // direction = "east";
-         // directions[directionsLength] = std::string(direction);
-         // directionsLength += 1;
+         directions[directionsLength] = std::string("east");
+         directionsLength += 1;
       } else if(canMove(b, SOUTH, maze, solution)){
          l[0] = b[0];
          l[1] = b[1] + 1;
          moveB(b, l);
-         // direction = "south";
-         // directions[directionsLength] = std::string(direction);
-         // directionsLength += 1;
+         directions[directionsLength] = std::string("south");
+         directionsLength += 1;
       } else if(canMove(b, WEST, maze, solution)){
          l[0] = b[0] - 1;
          l[1] = b[1];
          moveB(b, l);
-         // direction = "west";
-         // directions[directionsLength] = std::string(direction);
-         // directionsLength += 1;
+         directions[directionsLength] = std::string("west");
+         directionsLength += 1;
       } 
       else {
          for(int i = 0; i < solution->size(); ++i){
@@ -95,6 +84,10 @@ Trail* MazeSolver::getSolution() {
       }
    }
    return solutionCopy;
+}
+
+std::string* MazeSolver::getDirections(){
+   return directions;
 }
 
 void MazeSolver::moveB(coordinate b, coordinate destination){

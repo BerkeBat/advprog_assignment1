@@ -1,4 +1,28 @@
+/* 
+    Berke Batmaz (s3782067)
 
+    -I decided to stick closely to the starter code and assignment spec,
+    only creating new attributes/methods where needed. The flow of the program
+    remains the same with where and how values are passed.
+
+    -I initially struggled with passing/returning arrays as parameters, especially
+    when working with the typedef 'coordinate' that I defined as an int array of length
+    2. I handled these issues by rewatching and understanding the video "Arrays, Pointers
+    and Arrays as Pointers" and looking through sample lecture code.
+
+    -Specifically in Milestone 3, the cardinal walking directions, even though the trail
+    holds very similar information regarding where in the maze we travelled to. To minimize
+    modifying the starter code and maintain readable code I decided on a new array of std strings
+    called 'directions'. This makes the code clear in that, when we move in a direction, I simply\
+    add that direction we just moved as a string to that array. It could get confusing and less readable
+    if the breadcrumb class implemented some form of a direction attribute that tracked either the movement
+    to it or movement out of it.
+
+    -My implementation has fairly obvious occurences of code repetition, code that could be split off
+    into functions. However my implementation allocates memory on the heap only when required and passes
+    references rather than pointers where possible, this makes it quite efficient memory-wise and avoids
+    memory leaks.
+ */
 #include <iostream>
 #include <string>
 
@@ -14,30 +38,24 @@ void readMazeStdin(Maze maze);
 
 // Print out a Maze to standard output.
 void printMazeStdout(Maze maze, Trail* solution);
+void printMazeAndDirectionsStdout(Maze maze, Trail* solution, std::string* directionsPtr);
 
 int main(int argc, char** argv) {
-    // THESE ARE SOME EXAMPLE FUNCTIONS TO HELP TEST YOUR CODE
-    // AS YOU WORK ON MILESTONE 2. YOU CAN UPDATE THEM YOURSELF
-    // AS YOU GO ALONG.
-    // COMMENT THESE OUT BEFORE YOU SUBMIT!!!
-    // std::cout << "TESTING - COMMENT THE OUT TESTING BEFORE YOU SUBMIT!!!" << std::endl;
-    // testBreadcrumb();
-    // testTrail();
-    // std::cout << "DONE TESTING" << std::endl << std::endl;
 
     // Load Maze from stdin
     Maze maze;
     readMazeStdin(maze);
 
     // Solve using MazeSolver
-    // THIS WILL ONLY WORK IF YOU'VE FINISHED MILESTONE 2
     MazeSolver* solver = new MazeSolver();
     Trail* solution = nullptr;
     solver->solve(maze);
     solution = solver->getSolution();
 
+    std::string* directionsPtr = solver->getDirections();
+
     // Print Maze to stdout
-    printMazeStdout(maze, solution);
+    printMazeAndDirectionsStdout(maze, solution, directionsPtr);
 
     delete solver;
 
@@ -46,7 +64,6 @@ int main(int argc, char** argv) {
 
 void readMazeStdin(Maze maze) {
     // ASSUME THE MAZE IS A FIXED SIZE (20X20).
-
     for(int y = 0; y < MAZE_DIM; ++y){
         for(int x = 0; x < MAZE_DIM; ++x){
             std::cin >> maze[y][x];
@@ -72,54 +89,25 @@ void printMazeStdout(Maze maze, Trail* solution) {
     }
 }
 
-void testBreadcrumb() {
-    std::cout << "TESTING BREADCRUMB" << std::endl;
-
-    // Make a breadcrumb and print out the contents
-    Breadcrumb* breadcrumb = new Breadcrumb(1, 1, false);
-    std::cout << breadcrumb->getX() << ",";
-    std::cout << breadcrumb->getY() << ",";
-    std::cout << breadcrumb->isStale() << std::endl;
-
-    // Change breadcrumb stale-ness and print again
-    breadcrumb->setStale(true);
-    std::cout << breadcrumb->getX() << ",";
-    std::cout << breadcrumb->getY() << ",";
-    std::cout << breadcrumb->isStale() << std::endl;
-}
-
-void testTrail() {
-    std::cout << "TESTING TRAIL" << std::endl;
-
-    // Make a simple trail, should be empty size
-    Trail* trail = new Trail();
-    std::cout << "Trail size: " << trail->size() << std::endl;
-
-    // Add a breadcrumb to the trail, print size, check contains
-    Breadcrumb* b1 = new Breadcrumb(1, 1, false);
-    trail->addCopy(b1);
-    std::cout << "Trail size: " << trail->size() << std::endl;
-    std::cout << "Contains (0,0): " << trail->contains(0,0) << std::endl;
-    std::cout << "Contains (1,1): " << trail->contains(1,1) << std::endl;
-
-    // Add second breadcrumb
-    Breadcrumb* b2 = new Breadcrumb(0, 0, true);
-    trail->addCopy(b2);
-    std::cout << "Trail size: " << trail->size() << std::endl;
-    std::cout << "Contains (0,0): " << trail->contains(0,0) << std::endl;
-    std::cout << "Contains (1,1): " << trail->contains(1,1) << std::endl;
-
-    // Test Get-ith - should be 0,0,true
-    Breadcrumb* getB = trail->getPtr(1);
-    std::cout << getB->getX() << ",";
-    std::cout << getB->getY() << ",";
-    std::cout << getB->isStale() << std::endl;
-
-    // Print out the trail
-    std::cout << "PRINTING OUT A TRAIL IS AN EXERCISE FOR YOU TO DO" << std::endl;
-    for(int i = 0; i < trail->size(); ++i){
-        if(trail->getPtr(i) != nullptr){
-            std::cout << trail->getPtr(i)->getX() << "," << trail->getPtr(i)->getY() << std::endl;
+void printMazeAndDirectionsStdout(Maze maze, Trail* solution,std::string* directionsPtr) {
+    for(int y = 0; y < MAZE_DIM; ++y){
+        for(int x = 0; x < MAZE_DIM; ++x){
+                if(solution->contains(x, y) && solution->getIndex(x, y)->isStale() == false){
+                    if(maze[y][x] == 'S'){
+                        std::cout << 'S';
+                    }else{
+                        std::cout << ROUTE;
+                    }
+                }else{
+                    std::cout << maze[y][x];
+                }
         }
+        std::cout << std::endl;
+    }
+    for(int i = 0; i < TRAIL_ARRAY_MAX_SIZE; ++i){
+        if(solution->getPtr(i) != nullptr && solution->getPtr(i)->isStale() == false){
+            std::cout << directionsPtr[i] << std::endl;
+        }
+        
     }
 }

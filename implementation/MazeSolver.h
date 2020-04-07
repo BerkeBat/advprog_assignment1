@@ -33,6 +33,7 @@ public:
 
    bool canMove(coordinate b, int direction, Maze maze, Trail* solution);
    void moveB(coordinate b, coordinate destination);
+   std::string* getDirections();
    /*                                           */
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
@@ -46,7 +47,7 @@ private:
    // Trail of breadcrumbs from the start to end
    Trail* solution;
 
-
+   std::string* directions;
    /*                                           */
    /* YOU MAY ADD YOUR MODIFICATIONS HERE       */
    /*                                           */
